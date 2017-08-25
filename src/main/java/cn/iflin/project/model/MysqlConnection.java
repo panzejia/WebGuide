@@ -1,4 +1,4 @@
-package cn.iflin.guide.model;
+package cn.iflin.project.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

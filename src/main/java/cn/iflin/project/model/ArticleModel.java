@@ -1,4 +1,4 @@
-package cn.iflin.guide.model;
+package cn.iflin.project.model;
 
 public class ArticleModel {
 	private String title;
