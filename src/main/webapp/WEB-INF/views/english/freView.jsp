@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<ol class="breadcrumb">
-		<li><a href="index.html">Home</a></li>
-		<li><a href="#" onclick="getEnglish()">英语词频</a></li>
+		<li><a href="index.jsp">主页</a></li>
+		<li><a href="english">英文词频</a></li>
 		<li class="active">词频排序</li>
 	</ol>
-	<div id="wordcloudRead" style="width:300px;height:300;margin:0 auto" hidden>
-		<svg ></svg>
-	</div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="table-responsive">

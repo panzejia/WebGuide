@@ -13,19 +13,37 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.iflin.project.model.ArticleModel;
 import cn.iflin.project.model.WordModel;
-import cn.iflin.project.wordcloud.WordCloud;
+import cn.iflin.project.participle.wordcloud.CalculateChineseFrequency;
+import cn.iflin.project.participle.wordcloud.ChineseParser;
 
 
 @Controller
 public class WordCloudController {
-
-	@RequestMapping(value = "/getWordFreTemp", method = RequestMethod.POST)
-	public String getWordFreTemp(@RequestParam("content") String content,@RequestParam("tag") String tag, Model model) {
-		ArrayList<WordModel> wordList = WordCloud.getWordFre(content, "temp",tag,"");
+	@RequestMapping("/wordcloud")
+	public String getEnglishPage(Model model) {
+		return "wordcloud/wordcloud";
+	}
+	
+	@RequestMapping(value = "/wordcloud/doResult", method = RequestMethod.POST)
+	public String getWordFreTemp(@RequestParam("content") String content, Model model) {
+		ArrayList<WordModel> wordList = CalculateChineseFrequency.getWordFre(content, "temp");
+		WordModel word;
+		String datas = "";
+		if(wordList.size()>20){
+			for (int i = 0; i < 20; i++) {
+				word=wordList.get(i);
+				datas += word.getWord()+",";
+			}
+		}else{
+			for (int i = 0; i < wordList.size(); i++) {
+				word=wordList.get(i);
+				datas += word.getWord()+",";
+			}
+		}
 		model.addAttribute("data", content);
 		model.addAttribute("wordList", wordList);
 		model.addAttribute("total", wordList.size());
-		model.addAttribute("tag", "wordCloudByUser");
+		model.addAttribute("chinesecloudcontent", datas);
 		return "wordcloud/freView";
 	}
 
@@ -49,22 +67,9 @@ public class WordCloudController {
 //		
 //		ResponseJsonUtils.json(response, data);  
 //	}
-//	@RequestMapping(value = "/getWordCloudDrawByUser", method = RequestMethod.POST)
-//	public void getWordCloudDrawByUser(HttpServletRequest request, HttpServletResponse response,@RequestParam("content") String content) {
-//		ArrayList<WordModel> wordList = WordCloud.getWordFre(content, "temp","chinese","");
-//		String[] data = new String[20];
-//		WordModel word;
-//		if(wordList.size()>20){
-//			for (int i = 0; i < 20; i++) {
-//				word=wordList.get(i);
-//				data[i] = word.getWord();
-//			}
-//		}else{
-//			for (int i = 0; i < wordList.size(); i++) {
-//				word=wordList.get(i);
-//				data[i] = word.getWord();
-//			}
-//		}
-//		ResponseJsonUtils.json(response, data);  
-//	}
+	@RequestMapping(value = "/getWordCloudDrawByUser", method = RequestMethod.POST)
+	public void getWordCloudDrawByUser(HttpServletRequest request, HttpServletResponse response,@RequestParam("content") String content) {
+		String[] data = ChineseParser.changeList(content);
+		ResponseJsonUtils.json(response, data);  
+	}
 }
